@@ -27,7 +27,7 @@ define(['functions', 'three', 'physijs', 'orbitcontrols'], function(Functions, T
 
 		module.setControls();
 
-		var hash = location.hash.replace('#', ''); // which world? petri, hill, pool
+		var hash = location.hash.replace('#', ''); // which world? petri, hill, pool, target
 
 		module.world = hash;
 		module.initWorld(module.world);
@@ -149,6 +149,14 @@ define(['functions', 'three', 'physijs', 'orbitcontrols'], function(Functions, T
 			case 'pool':
 				require(['pool'], function(Pool) {
 					Pool.init({
+						world: module
+					});
+				});
+			break;
+
+			case 'target':
+				require(['target'], function(Target) {
+					Target.init({
 						world: module
 					});
 				});

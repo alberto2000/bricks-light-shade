@@ -1,19 +1,19 @@
-// POOL.JS
-define(['functions', 'three', 'poolmonster', 'ball', 'physijs'], function(Functions, THREE, PoolMonster, Ball) {
+// TARGET.JS
+define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Functions, THREE, TargetMonster, Ball) {
 
 	module = {
 		world: {},
 		floorWidth: 10,
-		floorDepth: 10
+		floorDepth: 10,
 	};
 
 	module.init = function(options) {
 
-		log('Pool World init');
+		log('Target World init');
 
 		module.world = options.world;
 
-		$('#page').addClass('world-pool');
+		$('#page').addClass('world-target');
 
         module.createFloor();
 
@@ -21,10 +21,10 @@ define(['functions', 'three', 'poolmonster', 'ball', 'physijs'], function(Functi
 
         module.initControls();
 
-        module.addPoolMonster({
+        module.addTargetMonster({
         	size: 1,
         	position: {
-        		x: -0.7, y: 1, z: 0
+        		x: 0, y: 1, z: 0
         	},
         	parent: module
         }, 1);
@@ -34,29 +34,39 @@ define(['functions', 'three', 'poolmonster', 'ball', 'physijs'], function(Functi
 	}
 
 	module.setCamera = function() {
-	       // ...
+	       module.world.camera.position.set(2, 7, 10);
 	}
 
 	module.initControls = function() {
 
 		$('#add-monster-button').click(function(event) {
-	        module.addPoolMonster({
+	        module.addTargetMonster({
 	        	size: 1,
 	        	position: {
-	        		x: -0.7, y: 1, z: 0
+	        		x: 0, y: 1, z: 0
 	        	},
 	        	parent: module
 	        }, 1);
 		});
 
 		$('#add-ball-button').click(function(event) {
+
+			var ballX = Math.floor(Math.random() * (5 - 0 + 1)) + 0;
+			ballX *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
+
+			var ballY = Math.floor(Math.random() * (25 - 20 + 1)) + 20;
+
+			var ballZ = Math.floor(Math.random() * (5 - 0 + 1)) + 0;
+			ballZ *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
+
 	        module.addBall({
 	        	size: 0.5,
 	        	position: {
-	        		x: 5, y: 6, z: 0
+	        		x: ballX, y: ballY, z: ballZ
 	        	},
-        		parent: module
+	        	parent: module
 	        }, 1);
+
 		});
 	}
 
@@ -136,72 +146,16 @@ define(['functions', 'three', 'poolmonster', 'ball', 'physijs'], function(Functi
 
 			module.world.scene.add(floor5);
 
-			// create walls only now
-			module.createLaunchWall();
-			module.createSecondaryWalls();
-
 		});
 
 	}
 
-	module.createLaunchWall = function() {
-
-		var material = Physijs.createMaterial(new THREE.MeshLambertMaterial({
-			color: 0x66ccff,
-			reflectivity: 0,
-			transparent: true,
-			opacity: 0.5
-		}), 0.4, 0.8);
-
-		var launchWall = new Physijs.BoxMesh(new THREE.CubeGeometry(0.25, 2, 2), material, 0);
-
-		launchWall.userData.id = 'launchWall';
-
-		launchWall.position.x = -1.78;
-		launchWall.position.y = 1;
-		launchWall.position.z = 0;
-
-		module.world.scene.add(launchWall);
-
-	}
-
-	module.createSecondaryWalls = function() {
-
-		var material = Physijs.createMaterial(new THREE.MeshLambertMaterial({
-			color: 0x66ccff,
-			reflectivity: 0,
-			transparent: true,
-			opacity: 0.5
-		}), 0.4, 0.8);
-
-		var leftWall = new Physijs.BoxMesh(new THREE.CubeGeometry(5, 1, 0.25), material, 0);
-
-		leftWall.userData.id = 'leftWall';
-
-		leftWall.position.x = 0.6;
-		leftWall.position.y = 0.5;
-		leftWall.position.z = -1 - (0.25 / 2);
-
-		module.world.scene.add(leftWall);
-
-		var rightWall = new Physijs.BoxMesh(new THREE.CubeGeometry(5, 1, 0.25), material, 0);
-
-		rightWall.userData.id = 'rightWall';
-
-		rightWall.position.x = 0.6;
-		rightWall.position.y = 0.5;
-		rightWall.position.z = 1 + (0.25 / 2);
-
-		module.world.scene.add(rightWall);
-
-	}
-
-	module.addPoolMonster = function(options, number) {
+	module.addTargetMonster = function(options, number) {
 
 		options.world = module.world;
 
 		for (var i = 0; i < number; i++) {
-			var newPoolMonster = new PoolMonster(options);
+			var newTargetMonster = new TargetMonster(options);
 		}
 
 	}
@@ -218,10 +172,10 @@ define(['functions', 'three', 'poolmonster', 'ball', 'physijs'], function(Functi
 
 	module.monsterDied = function() {
 
-        module.addPoolMonster({
+        module.addTargetMonster({
         	size: 1,
         	position: {
-        		x: -0.7, y: 1, z: 0
+        		x: 0, y: 1, z: 0
         	},
         	parent: module
         }, 1);
@@ -230,12 +184,12 @@ define(['functions', 'three', 'poolmonster', 'ball', 'physijs'], function(Functi
 
 	module.ballDied = function() {
 
-		var ballX = Math.floor(Math.random() * (8 - 5 + 1)) + 5;
+		var ballX = Math.floor(Math.random() * (5 - 0 + 1)) + 0;
+		ballX *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
 
 		var ballY = Math.floor(Math.random() * (25 - 20 + 1)) + 20;
-		ballY *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
 
-		var ballZ = Math.floor(Math.random() * 5);
+		var ballZ = Math.floor(Math.random() * (5 - 0 + 1)) + 0;
 		ballZ *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
 
         module.addBall({
@@ -254,12 +208,12 @@ define(['functions', 'three', 'poolmonster', 'ball', 'physijs'], function(Functi
 
 		module.ballRainInterval = setInterval(function() {
 
-			var ballX = Math.floor(Math.random() * (8 - 5 + 1)) + 5;
+			var ballX = Math.floor(Math.random() * (5 - 0 + 1)) + 0;
+			ballX *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
 
 			var ballY = Math.floor(Math.random() * (25 - 20 + 1)) + 20;
-			ballY *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
 
-			var ballZ = Math.floor(Math.random() * 5);
+			var ballZ = Math.floor(Math.random() * (5 - 0 + 1)) + 0;
 			ballZ *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
 
 	        module.addBall({
@@ -272,9 +226,9 @@ define(['functions', 'three', 'poolmonster', 'ball', 'physijs'], function(Functi
 
 	        i++;
 
-	        if (i >= 20) clearInterval(module.ballRainInterval);
+	        if (i >= 100) clearInterval(module.ballRainInterval);
 
-		}, 500);
+		}, 50);
 
 	}
 

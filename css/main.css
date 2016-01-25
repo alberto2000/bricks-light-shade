@@ -176,6 +176,10 @@ html {
 }
 
 /* _ELEMENTS.SCSS */
+html, body {
+  overflow: hidden;
+}
+
 #information {
   position: absolute;
   top: 16px;

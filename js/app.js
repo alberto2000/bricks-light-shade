@@ -12,9 +12,11 @@ requirejs.config({
 		'petrimonster': 'app/petrimonster',
 		'hillmonster': 'app/hillmonster',
 		'poolmonster': 'app/poolmonster',
+		'targetmonster': 'app/targetmonster',
 		'ball': 'app/ball',
 		'petri': 'app/petri',
 		'hill': 'app/hill',
+		'target': 'app/target',
 		'orbitcontrols': 'plugins/OrbitControls'
 	},
 	shim: {

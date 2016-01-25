@@ -1,4 +1,4 @@
-// MONSTER.JS
+// PETRIMONSTER.JS
 define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 	function PetriMonster(options) {
