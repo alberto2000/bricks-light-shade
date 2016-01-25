@@ -1,0 +1,61 @@
+/* _ELEMENTS.SCSS */
+
+#page {
+
+}
+
+#information {
+	position: absolute;
+	top: 16px;
+	left: 16px;
+	z-index: 5;
+
+	.inner {
+		padding: $basicPadding / 2;
+	}
+
+	.time {
+		display: block;
+	}
+	
+	.generation {
+		display: block;
+	}
+
+	.testid {
+		display: block;
+	}
+}
+
+#controls {
+	display: none;
+	position: absolute;
+	background-color: rgba(255,255,255,0.5);
+	top: 16px;
+	left: 16px;
+	z-index: 10;
+
+	.inner {
+		padding: $basicPadding / 2;
+	}
+
+	input[type="button"] {
+		display: block;
+		color: black;
+		background-color: white;
+		margin-bottom: $basicPadding / 2;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	#camera-rotation-button {
+		color: white;
+		background-color: red;
+
+		&.active {
+			background-color: green;
+		}
+	}
+}
