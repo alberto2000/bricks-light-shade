@@ -16,6 +16,7 @@ define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Func
 		$('#page').addClass('world-target');
 
         module.createFloor();
+        module.createShelter();
 
         module.setCamera();
 
@@ -147,6 +148,47 @@ define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Func
 			module.world.scene.add(floor5);
 
 		});
+
+	}
+
+	module.createShelter = function() {
+
+		var material = Physijs.createMaterial(new THREE.MeshLambertMaterial({
+			color: 0x66ccff,
+			reflectivity: 0,
+			transparent: true,
+			opacity: 0.5
+		}), 0.4, 0.8);
+
+		var shelter1 = new Physijs.BoxMesh(new THREE.CubeGeometry(2, 0.25, 1), material, 0);
+
+		shelter1.userData.id = 'shelter1';
+
+		shelter1.position.x = -3;
+		shelter1.position.y = 3;
+		shelter1.position.z = -3;
+
+		module.world.scene.add(shelter1);
+
+		var shelter2 = new Physijs.BoxMesh(new THREE.CubeGeometry(1, 0.25, 3), material, 0);
+
+		shelter2.userData.id = 'shelter2';
+
+		shelter2.position.x = 3;
+		shelter2.position.y = 4;
+		shelter2.position.z = 3;
+
+		module.world.scene.add(shelter2);
+
+		var shelter3 = new Physijs.BoxMesh(new THREE.CubeGeometry(2, 0.25, 2), material, 0);
+
+		shelter3.userData.id = 'shelter3';
+
+		shelter3.position.x = 3;
+		shelter3.position.y = 2;
+		shelter3.position.z = -3;
+
+		module.world.scene.add(shelter3);
 
 	}
 
