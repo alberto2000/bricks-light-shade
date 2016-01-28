@@ -78,6 +78,7 @@ define(['functions', 'three', 'physijs', 'orbitcontrols'], function(Functions, T
 		renderer.shadowMap.type = THREE.BasicShadowMap;
 		renderer.shadowMapAutoUpdate = true;
 
+		renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
 		renderer.setSize(window.innerWidth, window.innerHeight);
 
 		module.renderer = renderer;
@@ -181,9 +182,15 @@ define(['functions', 'three', 'physijs', 'orbitcontrols'], function(Functions, T
 		});
 
 		$(document).keypress(function(event) {
+
 			if (event.which == 100) {
 				$('#controls').toggle();
 			}
+
+			if (event.which == 105) {
+				$('#information').toggle();
+			}
+
 		});
 
 	}

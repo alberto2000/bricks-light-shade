@@ -25,7 +25,7 @@ define(['functions', 'three', 'petrimonster', 'ball', 'physijs'], function(Funct
         		x: 0, y: 4, z: 0
         	},
         	parent: module
-        }, 3);
+        }, 1);
 
         module.addBall({
         	size: 0.5,
@@ -33,7 +33,7 @@ define(['functions', 'three', 'petrimonster', 'ball', 'physijs'], function(Funct
         		x: 0, y: 6, z: 0
         	},
         	parent: module
-        }, 3);
+        }, 1);
 
 	}
 
