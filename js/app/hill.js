@@ -1,79 +1,81 @@
 // HILL.JS
 define(['functions', 'three', 'hillmonster', 'ball', 'physijs'], function(Functions, THREE, HillMonster, Ball) {
 
-	module = {
+	hillModule = {
 		world: {},
 		floorWidth: 20,
 		floorDepth: 10,
 		rampWidth: 0,
 		rampHeight: 0,
 		rampLength: 0,
-		balls: []
+		balls: [],
+		allIncrement: 50
 	};
 
-	module.init = function(options) {
+	hillModule.init = function(options) {
 
 		log('Hill World init');
 
-		module.world = options.world;
+		hillModule.world = options.world;
+		hillModule.all = options.all;
 
 		$('#page').addClass('world-hill');
 
-        module.createFloor();
-        module.createHill();
+			hillModule.createFloor();
+			hillModule.createHill();
 
-        module.setCamera();
+			if (!hillModule.all) hillModule.setCamera();
 
-        module.initControls();
+			hillModule.initControls();
 
-        module.addHillMonster({
-        	size: 1,
-        	position: {
-        		x: -7, y: 0.5, z: 0
-        	},
-        	parent: module
-        }, 1);
+			hillModule.addHillMonster({
+				size: 1,
+				position: {
+					x: hillModule.all ? -7+hillModule.allIncrement : -7, y: 0.5, z: 0
+				},
+				parent: hillModule
+			}, 1);
 
-        module.addBall({
-        	size: 0.5,
-        	position: {
-        		x: 5, y: 6, z: 0
-        	},
-        	parent: module
-        }, 3);
+			hillModule.addBall({
+				size: 0.5,
+				position: {
+					x: hillModule.all ? 5+hillModule.allIncrement : 5, y: 6, z: 0
+				},
+				parent: hillModule
+			}, 3);
 
 	}
 
-	module.setCamera = function() {
-        module.world.camera.position.set(-10, 5, 10);
+	hillModule.setCamera = function() {
+		hillModule.world.camera.position.set(-10, 5, 10);
 	}
 
-	module.initControls = function() {
+	hillModule.initControls = function() {
 
-		$('#add-monster-button').click(function(event) {
-	        module.addHillMonster({
-	        	size: 1,
-	        	position: {
-	        		x: -7, y: 0.5, z: 0
-	        	},
-	        	parent: module
-	        }, 1);
+		$('#add-hill-monster-button').click(function(event) {
+			hillModule.addHillMonster({
+				size: 1,
+				position: {
+					x: hillModule.all ? -7+hillModule.allIncrement : -7, y: 0.5, z: 0
+				},
+				parent: hillModule
+			}, 1);
 		});
 
 		$('#add-ball-button').click(function(event) {
-	        module.addBall({
-	        	size: 0.5,
-	        	position: {
-	        		x: 5, y: 6, z: 0
-	        	},
-        		parent: module
-	        }, 1);
+			hillModule.addBall({
+				size: 0.5,
+				position: {
+					x: 5, y: 6, z: 0
+				},
+				parent: hillModule
+			}, 1);
 		});
 	}
 
-	module.createFloor = function() {
+	hillModule.createFloor = function() {
 
-		var geometry = new THREE.BoxGeometry(module.floorWidth, 0.25, module.floorDepth);
+		var geometry = new THREE.BoxGeometry(hillModule.floorWidth, 0.25, hillModule.floorDepth);
 		var texloader = new THREE.TextureLoader();
 		var textureAsset = 'chess2.jpg';
 
@@ -87,71 +89,23 @@ define(['functions', 'three', 'hillmonster', 'ball', 'physijs'], function(Functi
 
 			floor.userData.id = 'floor';
 
-			floor.receiveShadow = true;
+			floor.receiveShadow = false;
 
 			floor.position.x = 0;
 			floor.position.y = -0.25/2;
 			floor.position.z = 0;
 
-			module.world.scene.add(floor);
+			if (hillModule.all) floor.position.x += hillModule.allIncrement;
 
-			// 2nd floor
-			var floor2 = new Physijs.BoxMesh(geometry, material, 0);
+			hillModule.world.scene.add(floor);
 
-			floor2.userData.id = 'floor2';
-
-			floor2.receiveShadow = true;
-
-			floor2.position.x = 40;
-			floor2.position.y = -10 + -0.25/2;
-			floor2.position.z = 50;
-
-			module.world.scene.add(floor2);
-
-			// 3rd floor
-			var floor3 = new Physijs.BoxMesh(geometry, material, 0);
-
-			floor3.userData.id = 'floor3';
-
-			floor3.receiveShadow = true;
-
-			floor3.position.x = -50;
-			floor3.position.y = -30 + -0.25/2;
-			floor3.position.z = -30;
-
-			module.world.scene.add(floor3);
-
-			// 4th floor
-			var floor4 = new Physijs.BoxMesh(geometry, material, 0);
-
-			floor4.userData.id = 'floor4';
-
-			floor4.receiveShadow = true;
-
-			floor4.position.x = -30;
-			floor4.position.y = -40 + -0.25/2;
-			floor4.position.z = 30;
-
-			module.world.scene.add(floor4);
-
-			// 5th floor
-			var floor5 = new Physijs.BoxMesh(geometry, material, 0);
-
-			floor5.userData.id = 'floor5';
-
-			floor5.receiveShadow = true;
-
-			floor5.position.x = 50;
-			floor5.position.y = -20 + -0.25/2;
-			floor5.position.z = -40;
-
-			module.world.scene.add(floor5);
+			hillModule.world.hillCenter = floor.position;
 
 		});
 
 	}
 
-	module.createHill = function() {
+	hillModule.createHill = function() {
 
 		var mesh = null;
 		var loader = new THREE.JSONLoader();
@@ -169,30 +123,32 @@ define(['functions', 'three', 'hillmonster', 'ball', 'physijs'], function(Functi
 			mesh.userData.id = 'ramp';
 
 			mesh.geometry.dynamic = true;
-			mesh.receiveShadow = true;
-			mesh.castShadow = true;
+			mesh.receiveShadow = false;
+			mesh.castShadow = false;
 
 			mesh.position.x = 5;
 			mesh.position.y = 1.5;
 			mesh.position.z = 0;
 
+			if (hillModule.all) mesh.position.x += hillModule.allIncrement;
+
 			var box = new THREE.Box3().setFromObject(mesh);
 
-			module.rampLength = box.size().x;
-			module.rampHeight = box.size().y;
-			module.rampWidth = box.size().z;
+			hillModule.rampLength = box.size().x;
+			hillModule.rampHeight = box.size().y;
+			hillModule.rampWidth = box.size().z;
 
-			module.world.scene.add(mesh);
+			hillModule.world.scene.add(mesh);
 
 			// only now create walls
-			module.createWalls();
-			module.createSecondaryWalls();
+			hillModule.createWalls();
+			hillModule.createSecondaryWalls();
 
 		});
 
 	}
 
-	module.createWalls = function() {
+	hillModule.createWalls = function() {
 
 		var material = Physijs.createMaterial(new THREE.MeshLambertMaterial({
 			color: 0x66ccff,
@@ -201,29 +157,33 @@ define(['functions', 'three', 'hillmonster', 'ball', 'physijs'], function(Functi
 			opacity: 0.5
 		}), 0.4, 0.8);
 
-		var backWall = new Physijs.BoxMesh(new THREE.CubeGeometry(module.rampLength, module.rampHeight + 2, 0.25), material, 0);
+		var backWall = new Physijs.BoxMesh(new THREE.CubeGeometry(hillModule.rampLength, hillModule.rampHeight + 2, 0.25), material, 0);
 
 		backWall.userData.id = 'backWall';
 
 		backWall.position.x = 5;
-		backWall.position.y = module.rampHeight - 0.5;
-		backWall.position.z = -module.rampWidth/2 - 0.25/2;
+		backWall.position.y = hillModule.rampHeight - 0.5;
+		backWall.position.z = -hillModule.rampWidth/2 - 0.25/2;
 
-		module.world.scene.add(backWall);
+		if (hillModule.all) backWall.position.x += hillModule.allIncrement;
 
-		var frontWall = new Physijs.BoxMesh(new THREE.CubeGeometry(module.rampLength, module.rampHeight + 2, 0.25), material, 0);
+		hillModule.world.scene.add(backWall);
+
+		var frontWall = new Physijs.BoxMesh(new THREE.CubeGeometry(hillModule.rampLength, hillModule.rampHeight + 2, 0.25), material, 0);
 
 		frontWall.userData.id = 'frontWall';
 
 		frontWall.position.x = 5;
-		frontWall.position.y = module.rampHeight - 0.5;
-		frontWall.position.z = module.rampWidth/2 + 0.25/2;
+		frontWall.position.y = hillModule.rampHeight - 0.5;
+		frontWall.position.z = hillModule.rampWidth/2 + 0.25/2;
 
-		module.world.scene.add(frontWall);
+		if (hillModule.all) frontWall.position.x += hillModule.allIncrement;
+
+		hillModule.world.scene.add(frontWall);
 
 	}
 
-	module.createSecondaryWalls = function() {
+	hillModule.createSecondaryWalls = function() {
 
 		var material = Physijs.createMaterial(new THREE.MeshLambertMaterial({
 			color: 0x66ccff,
@@ -232,31 +192,35 @@ define(['functions', 'three', 'hillmonster', 'ball', 'physijs'], function(Functi
 			opacity: 0.5
 		}), 0.4, 0.8);
 
-		var backWall = new Physijs.BoxMesh(new THREE.CubeGeometry(module.rampLength, 1, 0.25), material, 0);
+		var backWall = new Physijs.BoxMesh(new THREE.CubeGeometry(hillModule.rampLength, 1, 0.25), material, 0);
 
 		backWall.userData.id = 'backWall';
 
 		backWall.position.x = -5;
 		backWall.position.y = 0.5;
-		backWall.position.z = -module.rampWidth/2 - 0.25/2;
+		backWall.position.z = -hillModule.rampWidth/2 - 0.25/2;
 
-		module.world.scene.add(backWall);
+		if (hillModule.all) backWall.position.x += hillModule.allIncrement;
 
-		var frontWall = new Physijs.BoxMesh(new THREE.CubeGeometry(module.rampLength, 1, 0.25), material, 0);
+		hillModule.world.scene.add(backWall);
+
+		var frontWall = new Physijs.BoxMesh(new THREE.CubeGeometry(hillModule.rampLength, 1, 0.25), material, 0);
 
 		frontWall.userData.id = 'frontWall';
 
 		frontWall.position.x = -5;
 		frontWall.position.y = 0.5;
-		frontWall.position.z = module.rampWidth/2 + 0.25/2;
+		frontWall.position.z = hillModule.rampWidth/2 + 0.25/2;
 
-		module.world.scene.add(frontWall);
+		if (hillModule.all) frontWall.position.x += hillModule.allIncrement;
+
+		hillModule.world.scene.add(frontWall);
 
 	}
 
-	module.addHillMonster = function(options, number) {
+	hillModule.addHillMonster = function(options, number) {
 
-		options.world = module.world;
+		options.world = hillModule.world;
 
 		for (var i = 0; i < number; i++) {
 			var newHillMonster = new HillMonster(options);
@@ -264,9 +228,9 @@ define(['functions', 'three', 'hillmonster', 'ball', 'physijs'], function(Functi
 
 	}
 
-	module.addBall = function(options, number) {
+	hillModule.addBall = function(options, number) {
 
-		options.world = module.world;
+		options.world = hillModule.world;
 
 		for (var i = 0; i < number; i++) {
 			var newBall = new Ball(options);
@@ -274,30 +238,30 @@ define(['functions', 'three', 'hillmonster', 'ball', 'physijs'], function(Functi
 
 	}
 
-	module.monsterDied = function() {
+	hillModule.monsterDied = function() {
 
-        module.addHillMonster({
-        	size: 1,
-        	position: {
-        		x: -7, y: 0.5, z: 0
-        	},
-        	parent: module
-        }, 1);
-
-	}
-
-	module.ballDied = function() {
-
-        module.addBall({
-        	size: 0.5,
-        	position: {
-        		x: 5, y: 6, z: 0
-        	},
-        	parent: module
-        }, 1);
+		hillModule.addHillMonster({
+			size: 1,
+			position: {
+				x: hillModule.all ? -7+hillModule.allIncrement : -7, y: 0.5, z: 0
+			},
+			parent: hillModule
+		}, 1);
 
 	}
 
-	return module;
+	hillModule.ballDied = function() {
+
+		hillModule.addBall({
+			size: 0.5,
+			position: {
+				x: hillModule.all ? 5+hillModule.allIncrement : 5, y: 6, z: 0
+			},
+			parent: hillModule
+		}, 1);
+
+	}
+
+	return hillModule;
 
 });

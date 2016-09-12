@@ -1,53 +1,55 @@
 // TARGET.JS
 define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Functions, THREE, TargetMonster, Ball) {
 
-	module = {
+	targetModule = {
 		world: {},
 		floorWidth: 10,
 		floorDepth: 10,
+		allIncrement: 100
 	};
 
-	module.init = function(options) {
+	targetModule.init = function(options) {
 
 		log('Target World init');
 
-		module.world = options.world;
+		targetModule.world = options.world;
+		targetModule.all = options.all;
 
 		$('#page').addClass('world-target');
 
-        module.createFloor();
-        module.createShelter();
+		targetModule.createFloor();
+		targetModule.createShelter();
 
-        module.setCamera();
+		if (!targetModule.all) targetModule.setCamera();
 
-        module.initControls();
+		targetModule.initControls();
 
-        module.addTargetMonster({
-        	size: 1,
-        	position: {
-        		x: 0, y: 1, z: 0
-        	},
-        	parent: module
-        }, 1);
+		targetModule.addTargetMonster({
+			size: 1,
+			position: {
+				x: targetModule.all ? targetModule.allIncrement : 0, y: 1, z: 0
+			},
+			parent: targetModule
+		}, 1);
 
-        module.initBallRain();
+		targetModule.initBallRain();
 
 	}
 
-	module.setCamera = function() {
-	       module.world.camera.position.set(2, 7, 10);
+	targetModule.setCamera = function() {
+		targetModule.world.camera.position.set(2, 7, 10);
 	}
 
-	module.initControls = function() {
+	targetModule.initControls = function() {
 
-		$('#add-monster-button').click(function(event) {
-	        module.addTargetMonster({
-	        	size: 1,
-	        	position: {
-	        		x: 0, y: 1, z: 0
-	        	},
-	        	parent: module
-	        }, 1);
+		$('#add-target-monster-button').click(function(event) {
+			targetModule.addTargetMonster({
+				size: 1,
+				position: {
+					x: targetModule.all ? targetModule.allIncrement : 0, y: 1, z: 0
+				},
+				parent: targetModule
+			}, 1);
 		});
 
 		$('#add-ball-button').click(function(event) {
@@ -55,25 +57,27 @@ define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Func
 			var ballX = Math.floor(Math.random() * (5 - 0 + 1)) + 0;
 			ballX *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
 
+			if (targetModule.all ? ballX += targetModule.allIncrement : ballX);
+
 			var ballY = Math.floor(Math.random() * (25 - 20 + 1)) + 20;
 
 			var ballZ = Math.floor(Math.random() * (5 - 0 + 1)) + 0;
 			ballZ *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
 
-	        module.addBall({
-	        	size: 0.5,
-	        	position: {
-	        		x: ballX, y: ballY, z: ballZ
-	        	},
-	        	parent: module
-	        }, 1);
+			targetModule.addBall({
+				size: 0.5,
+				position: {
+					x: ballX, y: ballY, z: ballZ
+				},
+				parent: targetModule
+			}, 1);
 
 		});
 	}
 
-	module.createFloor = function() {
+	targetModule.createFloor = function() {
 
-		var geometry = new THREE.BoxGeometry(module.floorWidth, 0.25, module.floorDepth);
+		var geometry = new THREE.BoxGeometry(targetModule.floorWidth, 0.25, targetModule.floorDepth);
 		var texloader = new THREE.TextureLoader();
 		var textureAsset = 'chess.jpg';
 
@@ -87,71 +91,23 @@ define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Func
 
 			floor.userData.id = 'floor';
 
-			floor.receiveShadow = true;
+			floor.receiveShadow = false;
 
 			floor.position.x = 0;
 			floor.position.y = -0.25/2;
 			floor.position.z = 0;
 
-			module.world.scene.add(floor);
+			if (targetModule.all) floor.position.x += targetModule.allIncrement;
 
-			// 2nd floor
-			var floor2 = new Physijs.BoxMesh(geometry, material, 0);
+			targetModule.world.scene.add(floor);
 
-			floor2.userData.id = 'floor2';
-
-			floor2.receiveShadow = true;
-
-			floor2.position.x = 30;
-			floor2.position.y = -10 + -0.25/2;
-			floor2.position.z = 50;
-
-			module.world.scene.add(floor2);
-
-			// 3rd floor
-			var floor3 = new Physijs.BoxMesh(geometry, material, 0);
-
-			floor3.userData.id = 'floor3';
-
-			floor3.receiveShadow = true;
-
-			floor3.position.x = -40;
-			floor3.position.y = -20 + -0.25/2;
-			floor3.position.z = -20;
-
-			module.world.scene.add(floor3);
-
-			// 4th floor
-			var floor4 = new Physijs.BoxMesh(geometry, material, 0);
-
-			floor4.userData.id = 'floor4';
-
-			floor4.receiveShadow = true;
-
-			floor4.position.x = -20;
-			floor4.position.y = -30 + -0.25/2;
-			floor4.position.z = 10;
-
-			module.world.scene.add(floor4);
-
-			// 5th floor
-			var floor5 = new Physijs.BoxMesh(geometry, material, 0);
-
-			floor5.userData.id = 'floor5';
-
-			floor5.receiveShadow = true;
-
-			floor5.position.x = 40;
-			floor5.position.y = -20 + -0.25/2;
-			floor5.position.z = -30;
-
-			module.world.scene.add(floor5);
+			targetModule.world.targetCenter = floor.position;
 
 		});
 
 	}
 
-	module.createShelter = function() {
+	targetModule.createShelter = function() {
 
 		var material = Physijs.createMaterial(new THREE.MeshLambertMaterial({
 			color: 0x66ccff,
@@ -168,7 +124,9 @@ define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Func
 		shelter1.position.y = 3;
 		shelter1.position.z = -3;
 
-		module.world.scene.add(shelter1);
+		if (targetModule.all) shelter1.position.x += targetModule.allIncrement;
+
+		targetModule.world.scene.add(shelter1);
 
 		var shelter2 = new Physijs.BoxMesh(new THREE.CubeGeometry(1, 0.25, 3), material, 0);
 
@@ -178,7 +136,9 @@ define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Func
 		shelter2.position.y = 4;
 		shelter2.position.z = 3;
 
-		module.world.scene.add(shelter2);
+		if (targetModule.all) shelter2.position.x += targetModule.allIncrement;
+
+		targetModule.world.scene.add(shelter2);
 
 		var shelter3 = new Physijs.BoxMesh(new THREE.CubeGeometry(2, 0.25, 2), material, 0);
 
@@ -188,13 +148,15 @@ define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Func
 		shelter3.position.y = 2;
 		shelter3.position.z = -3;
 
-		module.world.scene.add(shelter3);
+		if (targetModule.all) shelter3.position.x += targetModule.allIncrement;
+
+		targetModule.world.scene.add(shelter3);
 
 	}
 
-	module.addTargetMonster = function(options, number) {
+	targetModule.addTargetMonster = function(options, number) {
 
-		options.world = module.world;
+		options.world = targetModule.world;
 
 		for (var i = 0; i < number; i++) {
 			var newTargetMonster = new TargetMonster(options);
@@ -202,9 +164,9 @@ define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Func
 
 	}
 
-	module.addBall = function(options, number) {
+	targetModule.addBall = function(options, number) {
 
-		options.world = module.world;
+		options.world = targetModule.world;
 
 		for (var i = 0; i < number; i++) {
 			var newBall = new Ball(options);
@@ -212,68 +174,72 @@ define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Func
 
 	}
 
-	module.monsterDied = function() {
+	targetModule.monsterDied = function() {
 
-        module.addTargetMonster({
-        	size: 1,
-        	position: {
-        		x: 0, y: 1, z: 0
-        	},
-        	parent: module
-        }, 1);
+		targetModule.addTargetMonster({
+			size: 1,
+			position: {
+				x: targetModule.all ? targetModule.allIncrement : 0, y: 1, z: 0
+			},
+			parent: targetModule
+		}, 1);
 
 	}
 
-	module.ballDied = function() {
+	targetModule.ballDied = function() {
 
 		var ballX = Math.floor(Math.random() * (5 - 0 + 1)) + 0;
 		ballX *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
+
+		if (targetModule.all ? ballX += targetModule.allIncrement : ballX);
 
 		var ballY = Math.floor(Math.random() * (25 - 20 + 1)) + 20;
 
 		var ballZ = Math.floor(Math.random() * (5 - 0 + 1)) + 0;
 		ballZ *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
 
-        module.addBall({
-        	size: 0.5,
-        	position: {
-        		x: ballX, y: ballY, z: ballZ
-        	},
-        	parent: module
-        }, 1);
+		targetModule.addBall({
+			size: 0.5,
+			position: {
+				x: ballX, y: ballY, z: ballZ
+			},
+			parent: targetModule
+		}, 1);
 
 	}
 
-	module.initBallRain = function() {
+	targetModule.initBallRain = function() {
 
 		var i = 0;
 
-		module.ballRainInterval = setInterval(function() {
+		targetModule.ballRainInterval = setInterval(function() {
 
 			var ballX = Math.floor(Math.random() * (5 - 0 + 1)) + 0;
 			ballX *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
+
+			if (targetModule.all ? ballX += targetModule.allIncrement : ballX);
 
 			var ballY = Math.floor(Math.random() * (25 - 20 + 1)) + 20;
 
 			var ballZ = Math.floor(Math.random() * (5 - 0 + 1)) + 0;
 			ballZ *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
 
-	        module.addBall({
-	        	size: 0.5,
-	        	position: {
-	        		x: ballX, y: ballY, z: ballZ
-	        	},
-	        	parent: module
-	        }, 1);
+			targetModule.addBall({
+				size: 0.5,
+				position: {
+					x: ballX, y: ballY, z: ballZ
+				},
+				parent: targetModule
+			}, 1);
 
-	        i++;
+			i++;
 
-	        if (i >= 100) clearInterval(module.ballRainInterval);
+			if (i >= 100) clearInterval(targetModule.ballRainInterval);
 
 		}, 50);
 
 	}
 
-	return module;
+	return targetModule;
 
 });

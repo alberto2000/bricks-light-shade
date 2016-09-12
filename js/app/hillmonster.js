@@ -113,7 +113,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 			constraint.setAngularLowerLimit({x: 0, y: 0, z: 0.1});
 			constraint.setAngularUpperLimit({x: 0, y: 0, z: 0});
 
-			constraint.configureAngularMotor(2, 0.1, 0, -20, 1000);
+			constraint.configureAngularMotor(2, 0.1, 0, -10, 1000);
 
 			constraint.enableAngularMotor(2);
 
@@ -134,7 +134,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 			constraint.setAngularLowerLimit({x: 0, y: 0, z: 0.1});
 			constraint.setAngularUpperLimit({x: 0, y: 0, z: 0});
 
-			constraint.configureAngularMotor(2, 0.1, 0, -20, 1000);
+			constraint.configureAngularMotor(2, 0.1, 0, -10, 1000);
 
 			constraint.enableAngularMotor(2);
 

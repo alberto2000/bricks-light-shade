@@ -10,7 +10,10 @@ define(['functions', 'three', 'physijs', 'orbitcontrols'], function(Functions, T
 		light: {},
 		monsters: [],
 		balls: [],
-		world: ''
+		world: '',
+		petriCenter: {},
+		hillCenter: {},
+		targetCenter: {}
 	};
 
 	module.init = function() {
@@ -20,6 +23,9 @@ define(['functions', 'three', 'physijs', 'orbitcontrols'], function(Functions, T
 		Physijs.scripts.worker = 'js/vendor/physijs_worker.js';
 		Physijs.scripts.ammo = 'ammo.js';
 
+		var hash = location.hash.replace('#', ''); // which world? petri, hill, target, all
+		module.world = hash;
+
 		module.setScene();
 		module.setRenderer();
 		module.setCamera();
@@ -27,9 +33,6 @@ define(['functions', 'three', 'physijs', 'orbitcontrols'], function(Functions, T
 
 		module.setControls();
 
-		var hash = location.hash.replace('#', ''); // which world? petri, hill, pool, target
-
-		module.world = hash;
 		module.initWorld(module.world);
 
 		module.initInformation();
@@ -93,12 +96,39 @@ define(['functions', 'three', 'physijs', 'orbitcontrols'], function(Functions, T
 
 	module.setCamera = function() {
 
-		module.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+		module.camera = new THREE.OrthographicCamera(window.innerWidth / -2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / -2, -500, 1000);
 
-        module.camera.position.set(2, 4, 10);
-        module.camera.lookAt(module.scene.position);
+		module.camera.position.set(4, 6, 10);
+		module.camera.lookAt(module.scene.position);
+		module.camera.zoom = 40;
 
-        module.scene.add(module.camera);
+		module.camera.updateProjectionMatrix();
+
+		if (module.world == 'all') {
+			var cameraIndex = 2;
+			var cameraInterval = setInterval(function() {
+				switch (cameraIndex) {
+					case 1:
+						module.camera.position.set(4, 6, 10);
+						module.controls.target = module.petriCenter;
+					break;
+
+					case 2:
+						module.camera.position.set(54, 6, 10);
+						module.controls.target = module.hillCenter;
+					break;
+
+					case 3:
+						module.camera.position.set(104, 6, 10);
+						module.controls.target = module.targetCenter;
+					break;
+				}
+				cameraIndex++;
+				if (cameraIndex == 4) cameraIndex = 1;
+			}, 20000);
+		}
+
+		module.scene.add(module.camera);
 
 		window.addEventListener('resize', function () {
 			module.camera.aspect = window.innerWidth / window.innerHeight;
@@ -112,7 +142,7 @@ define(['functions', 'three', 'physijs', 'orbitcontrols'], function(Functions, T
 		var light = new THREE.DirectionalLight(0xffffff);
 
 		light.position.set(0, 100, 60);
-		light.castShadow = true;
+		light.castShadow = false;
 		light.shadowCameraLeft = -60;
 		light.shadowCameraTop = -60;
 		light.shadowCameraRight = 60;
@@ -147,18 +177,27 @@ define(['functions', 'three', 'physijs', 'orbitcontrols'], function(Functions, T
 				});
 			break;
 
-			case 'pool':
-				require(['pool'], function(Pool) {
-					Pool.init({
+			case 'target':
+				require(['target'], function(Target) {
+					Target.init({
 						world: module
 					});
 				});
 			break;
 
-			case 'target':
-				require(['target'], function(Target) {
+			case 'all':
+				require(['petri', 'hill', 'target'], function(Petri, Hill, Target) {
+					Petri.init({
+						world: module,
+						all: true
+					});
+					Hill.init({
+						world: module,
+						all: true
+					});
 					Target.init({
-						world: module
+						world: module,
+						all: true
 					});
 				});
 			break;
@@ -197,26 +236,26 @@ define(['functions', 'three', 'physijs', 'orbitcontrols'], function(Functions, T
 
 	module.initInformation = function() {
 
-	    function checkTime(i) {
-	        return (i < 10) ? '0' + i : i;
-	    }
+			function checkTime(i) {
+				return (i < 10) ? '0' + i : i;
+			}
 
-	    function startTime() {
-	        var today = new Date(),
-	            h = checkTime(today.getHours()),
-	            m = checkTime(today.getMinutes()),
-	            s = checkTime(today.getSeconds());
-	        $('#information .time').html(h + ':' + m + ':' + s);
-	        t = setTimeout(function() {
-	            startTime()
-	        }, 500);
-	    }
+			function startTime() {
+				var today = new Date(),
+					h = checkTime(today.getHours()),
+					m = checkTime(today.getMinutes()),
+					s = checkTime(today.getSeconds());
+				$('#information .time').html(h + ':' + m + ':' + s);
+				t = setTimeout(function() {
+					startTime()
+				}, 500);
+			}
 
-	    startTime();
+			startTime();
 
-	    var rndGen = Math.floor(Math.random() * (592331 - 234322 + 1)) + 234322;
+			var rndGen = Math.floor(Math.random() * (592331 - 234322 + 1)) + 234322;
 
-	    $('#information .generation .number').html(rndGen);
+			$('#information .generation .number').html(rndGen);
 
 	}
 
