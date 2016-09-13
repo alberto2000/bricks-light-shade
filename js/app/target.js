@@ -1,8 +1,7 @@
 // TARGET.JS
-define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Functions, THREE, TargetMonster, Ball) {
+define(['functions', 'targetmonster', 'ball', 'physijs'], function(Functions, TargetMonster, Ball) {
 
 	targetModule = {
-		world: {},
 		floorWidth: 10,
 		floorDepth: 10,
 		allIncrement: 100
@@ -12,7 +11,6 @@ define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Func
 
 		log('Target World init');
 
-		targetModule.world = options.world;
 		targetModule.all = options.all;
 
 		$('#page').addClass('world-target');
@@ -37,7 +35,7 @@ define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Func
 	}
 
 	targetModule.setCamera = function() {
-		targetModule.world.camera.position.set(2, 7, 10);
+		THREEworld.camera.position.set(2, 7, 10);
 	}
 
 	targetModule.initControls = function() {
@@ -99,9 +97,9 @@ define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Func
 
 			if (targetModule.all) floor.position.x += targetModule.allIncrement;
 
-			targetModule.world.scene.add(floor);
+			THREEworld.scene.add(floor);
 
-			targetModule.world.targetCenter = floor.position;
+			THREEworld.targetCenter = floor.position;
 
 		});
 
@@ -126,7 +124,7 @@ define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Func
 
 		if (targetModule.all) shelter1.position.x += targetModule.allIncrement;
 
-		targetModule.world.scene.add(shelter1);
+		THREEworld.scene.add(shelter1);
 
 		var shelter2 = new Physijs.BoxMesh(new THREE.CubeGeometry(1, 0.25, 3), material, 0);
 
@@ -138,7 +136,7 @@ define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Func
 
 		if (targetModule.all) shelter2.position.x += targetModule.allIncrement;
 
-		targetModule.world.scene.add(shelter2);
+		THREEworld.scene.add(shelter2);
 
 		var shelter3 = new Physijs.BoxMesh(new THREE.CubeGeometry(2, 0.25, 2), material, 0);
 
@@ -150,13 +148,11 @@ define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Func
 
 		if (targetModule.all) shelter3.position.x += targetModule.allIncrement;
 
-		targetModule.world.scene.add(shelter3);
+		THREEworld.scene.add(shelter3);
 
 	}
 
 	targetModule.addTargetMonster = function(options, number) {
-
-		options.world = targetModule.world;
 
 		for (var i = 0; i < number; i++) {
 			var newTargetMonster = new TargetMonster(options);
@@ -165,8 +161,6 @@ define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Func
 	}
 
 	targetModule.addBall = function(options, number) {
-
-		options.world = targetModule.world;
 
 		for (var i = 0; i < number; i++) {
 			var newBall = new Ball(options);
@@ -234,7 +228,7 @@ define(['functions', 'three', 'targetmonster', 'ball', 'physijs'], function(Func
 
 			i++;
 
-			if (i >= 100) clearInterval(targetModule.ballRainInterval);
+			if (i >= 50) clearInterval(targetModule.ballRainInterval);
 
 		}, 50);
 

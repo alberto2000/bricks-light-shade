@@ -1,8 +1,7 @@
 // POOL.JS
-define(['functions', 'three', 'poolmonster', 'ball', 'physijs'], function(Functions, THREE, PoolMonster, Ball) {
+define(['functions', 'poolmonster', 'ball', 'physijs'], function(Functions, PoolMonster, Ball) {
 
 	module = {
-		world: {},
 		floorWidth: 10,
 		floorDepth: 10
 	};
@@ -10,8 +9,6 @@ define(['functions', 'three', 'poolmonster', 'ball', 'physijs'], function(Functi
 	module.init = function(options) {
 
 		log('Pool World init');
-
-		module.world = options.world;
 
 		$('#page').addClass('world-pool');
 
@@ -82,7 +79,7 @@ define(['functions', 'three', 'poolmonster', 'ball', 'physijs'], function(Functi
 			floor.position.y = -0.25/2;
 			floor.position.z = 0;
 
-			module.world.scene.add(floor);
+			THREEworld.scene.add(floor);
 
 			// 2nd floor
 			var floor2 = new Physijs.BoxMesh(geometry, material, 0);
@@ -95,7 +92,7 @@ define(['functions', 'three', 'poolmonster', 'ball', 'physijs'], function(Functi
 			floor2.position.y = -10 + -0.25/2;
 			floor2.position.z = 50;
 
-			module.world.scene.add(floor2);
+			THREEworld.scene.add(floor2);
 
 			// 3rd floor
 			var floor3 = new Physijs.BoxMesh(geometry, material, 0);
@@ -108,7 +105,7 @@ define(['functions', 'three', 'poolmonster', 'ball', 'physijs'], function(Functi
 			floor3.position.y = -20 + -0.25/2;
 			floor3.position.z = -20;
 
-			module.world.scene.add(floor3);
+			THREEworld.scene.add(floor3);
 
 			// 4th floor
 			var floor4 = new Physijs.BoxMesh(geometry, material, 0);
@@ -121,7 +118,7 @@ define(['functions', 'three', 'poolmonster', 'ball', 'physijs'], function(Functi
 			floor4.position.y = -30 + -0.25/2;
 			floor4.position.z = 10;
 
-			module.world.scene.add(floor4);
+			THREEworld.scene.add(floor4);
 
 			// 5th floor
 			var floor5 = new Physijs.BoxMesh(geometry, material, 0);
@@ -134,7 +131,7 @@ define(['functions', 'three', 'poolmonster', 'ball', 'physijs'], function(Functi
 			floor5.position.y = -20 + -0.25/2;
 			floor5.position.z = -30;
 
-			module.world.scene.add(floor5);
+			THREEworld.scene.add(floor5);
 
 			// create walls only now
 			module.createLaunchWall();
@@ -161,7 +158,7 @@ define(['functions', 'three', 'poolmonster', 'ball', 'physijs'], function(Functi
 		launchWall.position.y = 1;
 		launchWall.position.z = 0;
 
-		module.world.scene.add(launchWall);
+		THREEworld.scene.add(launchWall);
 
 	}
 
@@ -182,7 +179,7 @@ define(['functions', 'three', 'poolmonster', 'ball', 'physijs'], function(Functi
 		leftWall.position.y = 0.5;
 		leftWall.position.z = -1 - (0.25 / 2);
 
-		module.world.scene.add(leftWall);
+		THREEworld.scene.add(leftWall);
 
 		var rightWall = new Physijs.BoxMesh(new THREE.CubeGeometry(5, 1, 0.25), material, 0);
 
@@ -192,13 +189,11 @@ define(['functions', 'three', 'poolmonster', 'ball', 'physijs'], function(Functi
 		rightWall.position.y = 0.5;
 		rightWall.position.z = 1 + (0.25 / 2);
 
-		module.world.scene.add(rightWall);
+		THREEworld.scene.add(rightWall);
 
 	}
 
 	module.addPoolMonster = function(options, number) {
-
-		options.world = module.world;
 
 		for (var i = 0; i < number; i++) {
 			var newPoolMonster = new PoolMonster(options);
@@ -207,8 +202,6 @@ define(['functions', 'three', 'poolmonster', 'ball', 'physijs'], function(Functi
 	}
 
 	module.addBall = function(options, number) {
-
-		options.world = module.world;
 
 		for (var i = 0; i < number; i++) {
 			var newBall = new Ball(options);

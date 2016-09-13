@@ -1,11 +1,10 @@
 // TARGETMONSTER.JS
-define(['functions', 'three', 'physijs'], function(Functions, THREE) {
+define(['functions', 'physijs'], function(Functions) {
 
 	function TargetMonster(options) {
 
 		var self = this;
 
-		self.world = options.world;
 		self.size = options.size;
 		self.position = options.position;
 		self.parent = options.parent;
@@ -49,7 +48,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.meshes.body = body;
 
-			self.world.scene.add(self.meshes.body);
+			THREEworld.scene.add(self.meshes.body);
 
 		}
 
@@ -76,7 +75,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.meshes.leftFrontLeg = leftFrontLeg;
 
-			self.world.scene.add(self.meshes.leftFrontLeg);
+			THREEworld.scene.add(self.meshes.leftFrontLeg);
 
 		}
 
@@ -103,7 +102,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.meshes.rightFrontLeg = rightFrontLeg;
 
-			self.world.scene.add(self.meshes.rightFrontLeg);
+			THREEworld.scene.add(self.meshes.rightFrontLeg);
 
 		}
 
@@ -130,7 +129,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.meshes.leftBackLeg = leftBackLeg;
 
-			self.world.scene.add(self.meshes.leftBackLeg);
+			THREEworld.scene.add(self.meshes.leftBackLeg);
 
 		}
 
@@ -157,7 +156,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.meshes.rightBackLeg = rightBackLeg;
 
-			self.world.scene.add(self.meshes.rightBackLeg);
+			THREEworld.scene.add(self.meshes.rightBackLeg);
 
 		}
 
@@ -174,7 +173,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.constraints.leftFrontLegConstraint = leftFrontLegConstraint;
 
-			self.world.scene.addConstraint(self.constraints.leftFrontLegConstraint);
+			THREEworld.scene.addConstraint(self.constraints.leftFrontLegConstraint);
 
 			self.constraints.leftFrontLegConstraint.setLimits(-0.1, 0.25, 0, 0);
 			self.constraints.leftFrontLegConstraint.setRestitution(0.5, 0.5);
@@ -194,7 +193,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.constraints.rightFrontLegConstraint = rightFrontLegConstraint;
 
-			self.world.scene.addConstraint(self.constraints.rightFrontLegConstraint);
+			THREEworld.scene.addConstraint(self.constraints.rightFrontLegConstraint);
 
 			self.constraints.rightFrontLegConstraint.setLimits(-0.1, 0.25, 0, 0);
 			self.constraints.rightFrontLegConstraint.setRestitution(0.5, 0.5);
@@ -214,7 +213,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.constraints.leftBackLegConstraint = leftBackLegConstraint;
 
-			self.world.scene.addConstraint(self.constraints.leftBackLegConstraint);
+			THREEworld.scene.addConstraint(self.constraints.leftBackLegConstraint);
 
 			self.constraints.leftBackLegConstraint.setLimits(-0.1, 0.25, 0, 0);
 			self.constraints.leftBackLegConstraint.setRestitution(0.5, 0.5);
@@ -234,7 +233,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.constraints.rightBackLegConstraint = rightBackLegConstraint;
 
-			self.world.scene.addConstraint(self.constraints.rightBackLegConstraint);
+			THREEworld.scene.addConstraint(self.constraints.rightBackLegConstraint);
 
 			self.constraints.rightBackLegConstraint.setLimits(-0.1, 0.25, 0, 0);
 			self.constraints.rightBackLegConstraint.setRestitution(0.5, 0.5);
@@ -284,15 +283,15 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 	        	if (currentMonsterY < -150) {
 	        		clearInterval(self.dieCheckInterval);
 	        		clearInterval(self.moveLoopTimer);
-	        		self.world.scene.remove(self.meshes.body);
-	        		self.world.scene.remove(self.meshes.leftFrontLeg);
-	        		self.world.scene.remove(self.meshes.rightFrontLeg);
-	        		self.world.scene.remove(self.meshes.leftBackLeg);
-	        		self.world.scene.remove(self.meshes.rightBackLeg);
-	        		self.world.scene.removeConstraint(self.constraints.leftFrontLegConstraint);
-	        		self.world.scene.removeConstraint(self.constraints.rightFrontLegConstraint);
-	        		self.world.scene.removeConstraint(self.constraints.leftBackLegConstraint);
-	        		self.world.scene.removeConstraint(self.constraints.rightBackLegConstraint);
+	        		THREEworld.scene.remove(self.meshes.body);
+	        		THREEworld.scene.remove(self.meshes.leftFrontLeg);
+	        		THREEworld.scene.remove(self.meshes.rightFrontLeg);
+	        		THREEworld.scene.remove(self.meshes.leftBackLeg);
+	        		THREEworld.scene.remove(self.meshes.rightBackLeg);
+	        		THREEworld.scene.removeConstraint(self.constraints.leftFrontLegConstraint);
+	        		THREEworld.scene.removeConstraint(self.constraints.rightFrontLegConstraint);
+	        		THREEworld.scene.removeConstraint(self.constraints.leftBackLegConstraint);
+	        		THREEworld.scene.removeConstraint(self.constraints.rightBackLegConstraint);
 	        		self.parent.monsterDied();
 	        	}
 

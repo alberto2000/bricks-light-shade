@@ -1,5 +1,5 @@
 // WORLD.JS
-define(['functions', 'three', 'physijs', 'orbitcontrols'], function(Functions, THREE) {
+define(['functions', 'physijs', 'orbitcontrols'], function(Functions) {
 
 	var module = {
 		scene: {},
@@ -38,6 +38,8 @@ define(['functions', 'three', 'physijs', 'orbitcontrols'], function(Functions, T
 		module.initInformation();
 
 		requestAnimationFrame(module.render);
+
+		window.THREEworld = module;
 
 	}
 
@@ -88,7 +90,7 @@ define(['functions', 'three', 'physijs', 'orbitcontrols'], function(Functions, T
 
 		$('#page').append(module.renderer.domElement);
 
-		window.addEventListener('resize', function () {
+		window.addEventListener('resize', function() {
 			module.renderer.setSize(window.innerWidth, window.innerHeight);
 		});
 
@@ -143,15 +145,14 @@ define(['functions', 'three', 'physijs', 'orbitcontrols'], function(Functions, T
 
 		light.position.set(0, 100, 60);
 		light.castShadow = false;
-		light.shadowCameraLeft = -60;
-		light.shadowCameraTop = -60;
-		light.shadowCameraRight = 60;
-		light.shadowCameraBottom = 60;
-		light.shadowCameraNear = 1;
-		light.shadowCameraFar = 1000;
-		light.shadowBias = -.0001
-		light.shadowMapWidth = light.shadowMapHeight = 1024;
-		light.shadowDarkness = .7;
+		light.shadow.camera.left = -60;
+		light.shadow.camera.top = -60;
+		light.shadow.camera.right = 60;
+		light.shadow.camera.bottom = 60;
+		light.shadow.camera.near = 1;
+		light.shadow.camera.far = 1000;
+		light.shadow.bias = -.0001
+		light.shadow.mapSize.width = light.shadow.mapSize.height = 1024;
 
 		module.scene.add(light);
 
@@ -164,7 +165,7 @@ define(['functions', 'three', 'physijs', 'orbitcontrols'], function(Functions, T
 			case 'petri':
 				require(['petri'], function(Petri) {
 					Petri.init({
-						world: module
+						
 					});
 				});
 			break;
@@ -172,7 +173,7 @@ define(['functions', 'three', 'physijs', 'orbitcontrols'], function(Functions, T
 			case 'hill':
 				require(['hill'], function(Hill) {
 					Hill.init({
-						world: module
+						
 					});
 				});
 			break;
@@ -180,7 +181,7 @@ define(['functions', 'three', 'physijs', 'orbitcontrols'], function(Functions, T
 			case 'target':
 				require(['target'], function(Target) {
 					Target.init({
-						world: module
+						
 					});
 				});
 			break;
@@ -188,15 +189,12 @@ define(['functions', 'three', 'physijs', 'orbitcontrols'], function(Functions, T
 			case 'all':
 				require(['petri', 'hill', 'target'], function(Petri, Hill, Target) {
 					Petri.init({
-						world: module,
 						all: true
 					});
 					Hill.init({
-						world: module,
 						all: true
 					});
 					Target.init({
-						world: module,
 						all: true
 					});
 				});

@@ -1,11 +1,10 @@
 // POOLMONSTER.JS
-define(['functions', 'three', 'physijs'], function(Functions, THREE) {
+define(['functions', 'physijs'], function(Functions) {
 
 	function PoolMonster(options) {
 
 		var self = this;
 
-		self.world = options.world;
 		self.size = options.size;
 		self.position = options.position;
 		self.parent = options.parent;
@@ -42,7 +41,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.meshes.body = body;
 
-			self.world.scene.add(self.meshes.body);
+			THREEworld.scene.add(self.meshes.body);
 
 		}
 
@@ -67,7 +66,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.meshes.leg = leg;
 
-			self.world.scene.add(self.meshes.leg);
+			THREEworld.scene.add(self.meshes.leg);
 
 		}
 
@@ -82,7 +81,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.constraints.legConstraint = legConstraint;
 
-			self.world.scene.addConstraint(self.constraints.legConstraint);
+			THREEworld.scene.addConstraint(self.constraints.legConstraint);
 
 			self.constraints.legConstraint.setLimits(-3, 0, 0, 0);
 			self.constraints.legConstraint.setRestitution(0, 0);
@@ -97,9 +96,9 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 	        	if (currentMonsterY < -150) {
 	        		clearInterval(self.dieCheckInterval);
-	        		self.world.scene.remove(self.meshes.body);
-	        		self.world.scene.remove(self.meshes.leg);
-	        		self.world.scene.removeConstraint(self.constraints.legConstraint);
+	        		THREEworld.scene.remove(self.meshes.body);
+	        		THREEworld.scene.remove(self.meshes.leg);
+	        		THREEworld.scene.removeConstraint(self.constraints.legConstraint);
 	        		self.parent.monsterDied();
 	        	}
 

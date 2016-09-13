@@ -1,11 +1,10 @@
 // BALL.JS
-define(['functions', 'three', 'physijs'], function(Functions, THREE) {
+define(['functions', 'physijs'], function(Functions) {
 
 	function Ball(options) {
 
 		var self = this;
 
-		self.world = options.world;
 		self.size = options.size;
 		self.position = options.position;
 		self.parent = options.parent;
@@ -35,7 +34,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.meshes.ball = ball;
 
-			self.world.scene.add(ball);
+			THREEworld.scene.add(ball);
 
 		}
 
@@ -47,7 +46,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 	        	if (currentBallY < -150) {
 	        		clearInterval(self.dieCheckInterval);
-	        		self.world.scene.remove(self.meshes.ball);
+	        		THREEworld.scene.remove(self.meshes.ball);
 	        		self.parent.ballDied();
 	        	}
 

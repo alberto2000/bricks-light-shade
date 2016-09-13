@@ -1,11 +1,10 @@
 // PETRIMONSTER.JS
-define(['functions', 'three', 'physijs'], function(Functions, THREE) {
+define(['functions', 'physijs'], function(Functions) {
 
 	function PetriMonster(options) {
 
 		var self = this;
 
-		self.world = options.world;
 		self.size = options.size;
 		self.position = options.position;
 		self.parent = options.parent;
@@ -47,7 +46,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.meshes.body = body;
 
-			self.world.scene.add(self.meshes.body);
+			THREEworld.scene.add(self.meshes.body);
 
 		}
 
@@ -75,7 +74,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.meshes.leftLeg = leg;
 
-			self.world.scene.add(self.meshes.leftLeg);
+			THREEworld.scene.add(self.meshes.leftLeg);
 
 		}
 
@@ -103,7 +102,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.meshes.rightLeg = leg;
 
-			self.world.scene.add(self.meshes.rightLeg);
+			THREEworld.scene.add(self.meshes.rightLeg);
 
 		}
 
@@ -118,7 +117,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.constraints.leftLegConstraint = leftLegConstraint;
 
-			self.world.scene.addConstraint(self.constraints.leftLegConstraint);
+			THREEworld.scene.addConstraint(self.constraints.leftLegConstraint);
 
 			self.constraints.leftLegConstraint.setLimits(-45, 45, 0.5, 1);
 
@@ -135,7 +134,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.constraints.rightLegConstraint = rightLegConstraint;
 
-			self.world.scene.addConstraint(self.constraints.rightLegConstraint);
+			THREEworld.scene.addConstraint(self.constraints.rightLegConstraint);
 
 			self.constraints.rightLegConstraint.setLimits(-45, 45, 0.5, 1);
 
@@ -179,11 +178,11 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 	        	if (currentMonsterY < -150) {
 	        		clearInterval(self.dieCheckInterval);
 	        		clearInterval(self.moveLoopTimer);
-	        		self.world.scene.remove(self.meshes.body);
-	        		self.world.scene.remove(self.meshes.leftLeg);
-	        		self.world.scene.remove(self.meshes.rightLeg);
-	        		self.world.scene.removeConstraint(self.constraints.leftLegConstraint);
-	        		self.world.scene.removeConstraint(self.constraints.rightLegConstraint);
+	        		THREEworld.scene.remove(self.meshes.body);
+	        		THREEworld.scene.remove(self.meshes.leftLeg);
+	        		THREEworld.scene.remove(self.meshes.rightLeg);
+	        		THREEworld.scene.removeConstraint(self.constraints.leftLegConstraint);
+	        		THREEworld.scene.removeConstraint(self.constraints.rightLegConstraint);
 	        		self.parent.monsterDied();
 	        	}
 

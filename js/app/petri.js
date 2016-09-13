@@ -1,8 +1,7 @@
 // PETRI.JS
-define(['functions', 'three', 'petrimonster', 'ball', 'physijs'], function(Functions, THREE, PetriMonster, Ball) {
+define(['functions', 'petrimonster', 'ball', 'physijs'], function(Functions, PetriMonster, Ball) {
 
 	petriModule = {
-		world: {},
 		floorSize: 10
 	};
 
@@ -10,7 +9,6 @@ define(['functions', 'three', 'petrimonster', 'ball', 'physijs'], function(Funct
 
 		log('Petri World init');
 
-		petriModule.world = options.world;
 		petriModule.all = options.all;
 
 		$('#page').addClass('world-petri');
@@ -64,8 +62,6 @@ define(['functions', 'three', 'petrimonster', 'ball', 'physijs'], function(Funct
 
 	petriModule.addPetriMonster = function(options, number) {
 
-		options.world = petriModule.world;
-
 		for (var i = 0; i < number; i++) {
 			var newPetriMonster = new PetriMonster(options);
 		}
@@ -73,8 +69,6 @@ define(['functions', 'three', 'petrimonster', 'ball', 'physijs'], function(Funct
 	}
 
 	petriModule.addBall = function(options, number) {
-
-		options.world = petriModule.world;
 
 		for (var i = 0; i < number; i++) {
 			var newBall = new Ball(options);
@@ -104,9 +98,9 @@ define(['functions', 'three', 'petrimonster', 'ball', 'physijs'], function(Funct
 			floor.position.y = -0.25/2;
 			floor.position.z = 0;
 
-			petriModule.world.scene.add(floor);
+			THREEworld.scene.add(floor);
 
-			petriModule.world.petriCenter = floor.position;
+			THREEworld.petriCenter = floor.position;
 
 		});
 
@@ -130,7 +124,7 @@ define(['functions', 'three', 'petrimonster', 'ball', 'physijs'], function(Funct
 		backWall.position.y = wallHeight/2;
 		backWall.position.z = -petriModule.floorSize/2 + 0.25/2;
 
-		petriModule.world.scene.add(backWall);
+		THREEworld.scene.add(backWall);
 
 		var rightWall = new Physijs.BoxMesh(new THREE.CubeGeometry(0.25, wallHeight, petriModule.floorSize), material, 0);
 
@@ -140,7 +134,7 @@ define(['functions', 'three', 'petrimonster', 'ball', 'physijs'], function(Funct
 		rightWall.position.y = wallHeight/2;
 		rightWall.position.z = 0;
 
-		petriModule.world.scene.add(rightWall);
+		THREEworld.scene.add(rightWall);
 
 		var frontWall = new Physijs.BoxMesh(new THREE.CubeGeometry(petriModule.floorSize-0.5, wallHeight, 0.25), material, 0);
 
@@ -150,7 +144,7 @@ define(['functions', 'three', 'petrimonster', 'ball', 'physijs'], function(Funct
 		frontWall.position.y = wallHeight/2;
 		frontWall.position.z = petriModule.floorSize/2 - 0.25/2;
 
-		petriModule.world.scene.add(frontWall);
+		THREEworld.scene.add(frontWall);
 
 		var leftWall = new Physijs.BoxMesh(new THREE.CubeGeometry(0.25, wallHeight, petriModule.floorSize), material, 0);
 
@@ -160,7 +154,7 @@ define(['functions', 'three', 'petrimonster', 'ball', 'physijs'], function(Funct
 		leftWall.position.y = wallHeight/2;
 		leftWall.position.z = 0;
 
-		petriModule.world.scene.add(leftWall);
+		THREEworld.scene.add(leftWall);
 
 	}
 

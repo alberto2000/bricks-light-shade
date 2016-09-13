@@ -1,8 +1,7 @@
 // HILL.JS
-define(['functions', 'three', 'hillmonster', 'ball', 'physijs'], function(Functions, THREE, HillMonster, Ball) {
+define(['functions', 'hillmonster', 'ball', 'physijs'], function(Functions, HillMonster, Ball) {
 
 	hillModule = {
-		world: {},
 		floorWidth: 20,
 		floorDepth: 10,
 		rampWidth: 0,
@@ -16,7 +15,6 @@ define(['functions', 'three', 'hillmonster', 'ball', 'physijs'], function(Functi
 
 		log('Hill World init');
 
-		hillModule.world = options.world;
 		hillModule.all = options.all;
 
 		$('#page').addClass('world-hill');
@@ -47,7 +45,7 @@ define(['functions', 'three', 'hillmonster', 'ball', 'physijs'], function(Functi
 	}
 
 	hillModule.setCamera = function() {
-		hillModule.world.camera.position.set(-10, 5, 10);
+		THREEworld.camera.position.set(-10, 5, 10);
 	}
 
 	hillModule.initControls = function() {
@@ -97,9 +95,9 @@ define(['functions', 'three', 'hillmonster', 'ball', 'physijs'], function(Functi
 
 			if (hillModule.all) floor.position.x += hillModule.allIncrement;
 
-			hillModule.world.scene.add(floor);
+			THREEworld.scene.add(floor);
 
-			hillModule.world.hillCenter = floor.position;
+			THREEworld.hillCenter = floor.position;
 
 		});
 
@@ -138,7 +136,7 @@ define(['functions', 'three', 'hillmonster', 'ball', 'physijs'], function(Functi
 			hillModule.rampHeight = box.size().y;
 			hillModule.rampWidth = box.size().z;
 
-			hillModule.world.scene.add(mesh);
+			THREEworld.scene.add(mesh);
 
 			// only now create walls
 			hillModule.createWalls();
@@ -167,7 +165,7 @@ define(['functions', 'three', 'hillmonster', 'ball', 'physijs'], function(Functi
 
 		if (hillModule.all) backWall.position.x += hillModule.allIncrement;
 
-		hillModule.world.scene.add(backWall);
+		THREEworld.scene.add(backWall);
 
 		var frontWall = new Physijs.BoxMesh(new THREE.CubeGeometry(hillModule.rampLength, hillModule.rampHeight + 2, 0.25), material, 0);
 
@@ -179,7 +177,7 @@ define(['functions', 'three', 'hillmonster', 'ball', 'physijs'], function(Functi
 
 		if (hillModule.all) frontWall.position.x += hillModule.allIncrement;
 
-		hillModule.world.scene.add(frontWall);
+		THREEworld.scene.add(frontWall);
 
 	}
 
@@ -202,7 +200,7 @@ define(['functions', 'three', 'hillmonster', 'ball', 'physijs'], function(Functi
 
 		if (hillModule.all) backWall.position.x += hillModule.allIncrement;
 
-		hillModule.world.scene.add(backWall);
+		THREEworld.scene.add(backWall);
 
 		var frontWall = new Physijs.BoxMesh(new THREE.CubeGeometry(hillModule.rampLength, 1, 0.25), material, 0);
 
@@ -214,13 +212,11 @@ define(['functions', 'three', 'hillmonster', 'ball', 'physijs'], function(Functi
 
 		if (hillModule.all) frontWall.position.x += hillModule.allIncrement;
 
-		hillModule.world.scene.add(frontWall);
+		THREEworld.scene.add(frontWall);
 
 	}
 
 	hillModule.addHillMonster = function(options, number) {
-
-		options.world = hillModule.world;
 
 		for (var i = 0; i < number; i++) {
 			var newHillMonster = new HillMonster(options);
@@ -229,8 +225,6 @@ define(['functions', 'three', 'hillmonster', 'ball', 'physijs'], function(Functi
 	}
 
 	hillModule.addBall = function(options, number) {
-
-		options.world = hillModule.world;
 
 		for (var i = 0; i < number; i++) {
 			var newBall = new Ball(options);

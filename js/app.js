@@ -6,7 +6,6 @@ requirejs.config({
 		'functions': 'app/functions',
 		'main': 'app/main',
 		'events': 'app/events',
-		'three': 'vendor/three.min',
 		'physijs': 'vendor/physi',
 		'world': 'app/world',
 		'petrimonster': 'app/petrimonster',
@@ -20,12 +19,7 @@ requirejs.config({
 		'orbitcontrols': 'plugins/OrbitControls'
 	},
 	shim: {
-		'physijs': {
-			deps: ['three']
-		},
-		'orbitcontrols': {
-			deps: ['three']
-		}
+
 	},
 	urlArgs: 'bust=' + (new Date()).getTime() // CACHE BUSTING - REMOVE ON PRODUCTION
 });

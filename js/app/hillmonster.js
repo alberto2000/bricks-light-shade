@@ -1,11 +1,10 @@
 // HILLMONSTER.JS
-define(['functions', 'three', 'physijs'], function(Functions, THREE) {
+define(['functions', 'physijs'], function(Functions) {
 
 	function HillMonster(options) {
 
 		var self = this;
 
-		self.world = options.world;
 		self.size = options.size;
 		self.position = options.position;
 		self.parent = options.parent;
@@ -46,7 +45,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.meshes.body = body;
 
-			self.world.scene.add(self.meshes.body);
+			THREEworld.scene.add(self.meshes.body);
 
 		}
 
@@ -71,7 +70,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.meshes.leftLeg = leftLeg;
 
-			self.world.scene.add(self.meshes.leftLeg);
+			THREEworld.scene.add(self.meshes.leftLeg);
 
 		}
 
@@ -96,7 +95,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 			self.meshes.rightLeg = rightLeg;
 
-			self.world.scene.add(self.meshes.rightLeg);
+			THREEworld.scene.add(self.meshes.rightLeg);
 
 		}
 
@@ -108,7 +107,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 				new THREE.Vector3(self.position.x, self.position.y, self.position.z - self.size / 2 - self.size * 0.25 / 2)
 			);
 
-			self.world.scene.addConstraint(constraint);
+			THREEworld.scene.addConstraint(constraint);
 
 			constraint.setAngularLowerLimit({x: 0, y: 0, z: 0.1});
 			constraint.setAngularUpperLimit({x: 0, y: 0, z: 0});
@@ -129,7 +128,7 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 				new THREE.Vector3(self.position.x, self.position.y, self.position.z + self.size / 2 + self.size * 0.25 / 2)
 			);
 
-			self.world.scene.addConstraint(constraint);
+			THREEworld.scene.addConstraint(constraint);
 
 			constraint.setAngularLowerLimit({x: 0, y: 0, z: 0.1});
 			constraint.setAngularUpperLimit({x: 0, y: 0, z: 0});
@@ -150,11 +149,11 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 
 	        	if (currentMonsterY < -150) {
 	        		clearInterval(self.dieCheckInterval);
-	        		self.world.scene.remove(self.meshes.body);
-	        		self.world.scene.remove(self.meshes.leftLeg);
-	        		self.world.scene.remove(self.meshes.rightLeg);
-	        		self.world.scene.removeConstraint(self.constraints.leftLegConstraint);
-	        		self.world.scene.removeConstraint(self.constraints.rightLegConstraint);
+	        		THREEworld.scene.remove(self.meshes.body);
+	        		THREEworld.scene.remove(self.meshes.leftLeg);
+	        		THREEworld.scene.remove(self.meshes.rightLeg);
+	        		THREEworld.scene.removeConstraint(self.constraints.leftLegConstraint);
+	        		THREEworld.scene.removeConstraint(self.constraints.rightLegConstraint);
 	        		self.parent.monsterDied();
 	        	}
 
@@ -171,8 +170,6 @@ define(['functions', 'three', 'physijs'], function(Functions, THREE) {
 		self.addRightLegConstraint();
 
 		self.dieCheck();
-
-		// ---
 
 		function makeid() {
 		    var text = "";
