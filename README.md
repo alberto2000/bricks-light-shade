@@ -1,4 +1,4 @@
-#bricks-light-shade
+# bricks-light-shade
 #### A behavioural and aesthetic exploration of computationally generated artificial life forms, written in JavaScript using physi.js for physics engine and three.js as a renderer
 
 Click [here](www.riccardolardi.com/bricks) for original project description
